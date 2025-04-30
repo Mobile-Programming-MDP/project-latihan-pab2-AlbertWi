@@ -48,7 +48,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
+      throw Exception('Location services are disabled');
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -87,6 +87,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       );
       return;
     }
+
     try {
       await _getLocation();
       // Ambil nama lengkap dari koleksi users
@@ -102,6 +103,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         'fullName': fullName,
         'userId': uid, // optional: jika ingin simpan UID juga
       });
+
       if (!mounted) return;
       Navigator.pop(context);
     } catch (e) {
@@ -116,75 +118,72 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   void _showImageSourceDialog() {
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Choose Image Source"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _pickImage(ImageSource.camera);
-            },
-            child: Text("Camera"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _pickImage(ImageSource.gallery);
-            },
-            child: Text("Gallery"),
-          ),
-        ],
-      ),
-    );
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Choose Image Source"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.camera);
+                  },
+                  child: Text("Camera"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Text("Gallery"),
+                ),
+              ],
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add Post')),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _image != null
-                ? Image.file(
-                    _image!,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : GestureDetector(
-                    onTap: _showImageSourceDialog,
-                    child: Container(
+        appBar: AppBar(title: Text('Add Post')),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              _image != null
+                  ? Image.file(
+                      _image!,
                       height: 200,
-                      color: Colors.grey[300],
-                      child: Center(
-                        child: Icon(Icons.add_a_photo, size: 50),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : GestureDetector(
+                      onTap: _showImageSourceDialog,
+                      child: Container(
+                        height: 200,
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: Icon(Icons.add_a_photo, size: 50),
+                        ),
                       ),
                     ),
-                  ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _descriptionController,
-              textCapitalization: TextCapitalization.sentences,
-              maxLines: 3,
-              decoration: InputDecoration(
-                hintText: 'Add a brief description...',
-                border: OutlineInputBorder(),
+              SizedBox(height: 16),
+              TextField(
+                controller: _descriptionController,
+                textCapitalization: TextCapitalization.sentences,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: 'Add a brief description',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            _isUploading
-                ? CircularProgressIndicator()
-                : ElevatedButton.icon(
-                    onPressed: _submitPost,
-                    icon: Icon(Icons.upload),
-                    label: Text('Post'),
-                  ),
-          ],
-        ),
-      ),
-    );
+              SizedBox(height: 16),
+              _isUploading
+                  ? CircularProgressIndicator()
+                  : ElevatedButton.icon(
+                      onPressed: _submitPost,
+                      icon: Icon(Icons.upload),
+                      label: Text('Post')),
+            ],
+          ),
+        ));
   }
 }
